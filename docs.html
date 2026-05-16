@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Linux — docs</title>
+    <style>
+        body {
+            background-color: #001f3f;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 80px 20px 20px 20px;
+        }
+        header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        header h1 {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 0;
+        }
+        nav {
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        nav a:hover { text-decoration: underline; }
+        .content {
+            max-width: 600px;
+            margin: 60px auto 0 auto;
+            line-height: 1.6;
+            font-size: 1em;
+        }
+        h2 {
+            font-size: 1em;
+            margin-top: 2em;
+            margin-bottom: 0.3em;
+        }
+        pre {
+            background: #002f5f;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+        p { margin: 0.5em 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><strong>Static Linux</strong></h1>
+        <nav>
+            <a href="download.html">download</a> /
+            <a href="https://codeberg.org/StaticLinux">source</a> /
+            <a href="ecosystem.html">ecosystem</a> /
+            <a href="https://matrix.to/#/#staticlinux:matrix.apzhyn.xyz">matrix</a>
+        </nav>
+    </header>
+    <div class="content">
+        <h2>building from source</h2>
+        <p>clone the main repo and run the build script:</p>
+        <pre>git clone https://codeberg.org/StaticLinux/rootfs
+cd rootfs
+sh build.sh</pre>
+
+        <h2>booting in qemu</h2>
+        <pre>qemu-system-x86_64 \
+  -kernel linux-7.0.8/arch/x86/boot/bzImage \
+  -initrd rootfs.cpio.gz \
+  -append "console=ttyS0 init=/init" \
+  -nographic</pre>
+
+        <h2>installing packages</h2>
+        <p>use atlas to install packages:</p>
+        <pre>atlas dash
+atlas git</pre>
+
+        <h2>building packages</h2>
+        <p>use hephaestus to build a port:</p>
+        <pre>python3 hephaestus.py static-ports/shells/dash</pre>
+
+        <h2>ecosystem</h2>
+        <p><strong>prometheus</strong> — init system</p>
+        <p><strong>atlas</strong> — package manager</p>
+        <p><strong>hephaestus</strong> — package build system</p>
+        <p><strong>static-ports</strong> — package recipes</p>
+    </div>
+</body>
+</html>
