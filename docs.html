@@ -5,88 +5,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Static Linux — docs</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: #001f3f;
             color: white;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 80px 20px 20px 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         header {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+            padding: 20px;
         }
-        header h1 {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin: 0;
-        }
-        nav {
-            margin-top: 5px;
-            font-size: 0.9em;
-        }
+        header h1 { font-size: 1.2em; font-weight: bold; }
+        nav { margin-top: 5px; font-size: 0.9em; }
         nav a {
             color: white;
             text-decoration: none;
             margin: 0 8px;
         }
+        nav a:first-child { margin-left: 0; }
         nav a:hover { text-decoration: underline; }
+        .layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 180px;
+            padding: 20px;
+            border-right: 1px solid #ffffff22;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.9em;
+            overflow-y: auto;
+        }
+        .sidebar a {
+            color: #aac8e8;
+            text-decoration: none;
+            padding: 4px 0;
+        }
+        .sidebar a:hover { color: white; }
+        .sidebar a.active { color: white; font-weight: bold; }
+        .sidebar .section {
+            color: #ffffff55;
+            font-size: 0.8em;
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
         .content {
-            max-width: 600px;
-            margin: 60px auto 0 auto;
+            flex: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
             line-height: 1.6;
             font-size: 1em;
+            max-width: 680px;
         }
-        h2 {
-            font-size: 1em;
-            margin-top: 2em;
-            margin-bottom: 0.3em;
-        }
+        h2 { font-size: 1em; margin-top: 1.8em; margin-bottom: 0.4em; }
         pre {
             background: #002f5f;
             padding: 10px;
             border-radius: 4px;
             overflow-x: auto;
             font-size: 0.9em;
+            margin: 0.5em 0;
         }
         p { margin: 0.5em 0; }
+        .page { display: none; }
+        .page.active { display: block; }
     </style>
 </head>
 <body>
     <header>
         <h1><strong>Static Linux</strong></h1>
         <nav>
+            <a href="index.html">home</a> /
             <a href="download.html">download</a> /
             <a href="https://codeberg.org/StaticLinux">source</a> /
             <a href="ecosystem.html">ecosystem</a> /
             <a href="https://matrix.to/#/#staticlinux:matrix.apzhyn.xyz">matrix</a>
         </nav>
     </header>
-    <div class="content">
-        <h2>building from source</h2>
-        <p>clone the main repo and run the build script:</p>
-        <pre>git clone https://codeberg.org/StaticLinux/rootfs
-cd rootfs
+    <div class="layout">
+        <div class="sidebar">
+            <span class="section">getting started</span>
+            <a href="#" class="active" onclick="show('building', this)">building</a>
+            <a href="#" onclick="show('booting', this)">booting</a>
+            <span class="section">packages</span>
+            <a href="#" onclick="show('installing', this)">installing</a>
+            <a href="#" onclick="show('porting', this)">porting</a>
+            <span class="section">ecosystem</span>
+            <a href="#" onclick="show('prometheus', this)">prometheus</a>
+            <a href="#" onclick="show('atlas', this)">atlas</a>
+            <a href="#" onclick="show('hephaestus', this)">hephaestus</a>
+        </div>
+        <div class="content">
+            <div id="building" class="page active">
+                <h2>building from source</h2>
+                <p>clone the main repo and run the build script:</p>
+                <pre>git clone https://codeberg.org/StaticLinux/ashigaru
+cd ashigaru
 sh build.sh</pre>
-
-        <h2>booting in qemu</h2>
-        <pre>qemu-system-x86_64 \
+                <p>the build script will download sources, compile the kernel and busybox, and produce a bootable rootfs.</p>
+            </div>
+            <div id="booting" class="page">
+                <h2>booting in qemu</h2>
+                <pre>qemu-system-x86_64 \
   -kernel linux-7.0.8/arch/x86/boot/bzImage \
   -initrd rootfs.cpio.gz \
   -append "console=ttyS0 init=/init" \
   -nographic</pre>
-
-        <h2>installing packages</h2>
-        <p>use atlas to install packages:</p>
-        <pre>atlas dash
+                <p>exit qemu with <code>Ctrl+A</code> then <code>X</code>.</p>
+            </div>
+            <div id="installing" class="page">
+                <h2>installing packages</h2>
+                <p>use atlas to install packages:</p>
+                <pre>atlas dash
 atlas git</pre>
-
-        <h2>building packages</h2>
-        <p>use hephaestus to build a port:</p>
-        <pre>python3 hephaestus.py static-ports/shells/dash</pre>
-
-
+            </div>
+            <div id="porting" class="page">
+                <h2>building a port</h2>
+                <p>each port needs a <code>build.sh</code> and <code>pkg.toml</code>:</p>
+                <pre>static-ports/
+  shells/
+    dash/
+      build.sh
+      pkg.toml</pre>
+                <p>build it with hephaestus:</p>
+                <pre>python3 hephaestus.py static-ports/shells/dash</pre>
+            </div>
+            <div id="prometheus" class="page">
+                <h2>prometheus</h2>
+                <p>init system written in Rust. mounts filesystems, sets hostname, seeds rng, brings up loopback, spawns getty.</p>
+                <p>hostname is read from <code>/etc/hostname</code>.</p>
+            </div>
+            <div id="atlas" class="page">
+                <h2>atlas</h2>
+                <p>package manager written in Rust. verifies sha256, extracts tarballs to <code>/</code>.</p>
+                <pre>atlas dash-0.5.12</pre>
+            </div>
+            <div id="hephaestus" class="page">
+                <h2>hephaestus</h2>
+                <p>package build system written in Python. reads <code>pkg.toml</code>, runs <code>build.sh</code>, strips and tarballs the output.</p>
+                <pre>python3 hephaestus.py static-ports/shells/dash</pre>
+            </div>
+        </div>
     </div>
+    <script>
+        function show(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
+        }
+    </script>
 </body>
 </html>
