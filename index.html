@@ -52,18 +52,10 @@
             font-size: 1.2em;
         }
     </style>
-</head>
-<body>
-    <header>
-	    <h1><strong><a href="index.html" style="color: white; text-decoration: none;">Static Linux</a></strong></h1>
-        <nav>
-	    <a href="releases.html">releases</a> /
-            <a href="https://codeberg.org/StaticLinux">source</a> /
-            <a href="https://matrix.to/#/#staticlinux:matrix.apzhyn.xyz">matrix</a>
-
-
-        </nav>
-    </header>
+<div id="header"></div>
+<script>
+    fetch('header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+</script>
     <div class="main-content">
         <p>
             Static Linux is an extremely simple distro designed for little-to-no abstraction, works without GNU, and emphasizes extreme minimality.
