@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Linux</title>
+    <style>
+        body {
+            background-color: #001f3f;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+        }
+
+        header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        header h1 {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        nav {
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .main-content {
+            max-width: 600px;
+            padding-left: 20px;
+            padding-right: 20px;
+            line-height: 1.6;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Static Linux</h1>
+        <nav>
+            <a href="ecosystem">ecosystem</a> / 
+            <a href="https://matrix.to/#/#staticlinux:matrix.apzhyn.xyz">matrix</a> / 
+            <a href="https://codeberg.org/StaticLinux">source</a> /
+	    <a href="download">download</a>
+        </nav>
+    </header>
+    <div class="main-content">
+        <p>
+            Static Linux is an extremely simple distro designed for little-to-no abstraction, works without GNU, and emphasizes extreme minimality.
+	    <p> </p>
+            <strong>Functionality</strong>
+	    <ul>
+    <li>Fast and minimal</li>
+    <li>No GNU dependencies</li>
+    <li>Extreme simplicity</li>
+    <li>An init system written from scratch in blazingly fast Rust</li>
+    <li>A ports system</li>
+</ul>
+
+        </p>
+    </div>
+</body>
+</html>
