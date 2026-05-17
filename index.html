@@ -15,34 +15,33 @@
             justify-content: center;
             align-items: center;
             text-align: left;
-
-
+        }
         .main-content {
             max-width: 600px;
             padding-left: 20px;
             padding-right: 20px;
             line-height: 1.6;
             font-size: 1.2em;
+            margin-top: 60px;
         }
     </style>
+</head>
+<body>
 <div id="header"></div>
 <script>
     fetch('header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
 </script>
     <div class="main-content">
-        <p>
-            Static Linux is an extremely simple distro designed for little-to-no abstraction, works without GNU, and emphasizes extreme minimality.
-	    <p> </p>
-            <strong>Functionality</strong>
-	    <ul>
-    <li>Fast and minimal</li>
-    <li>No GNU dependencies</li>
-    <li>Extreme simplicity</li>
-    <li>An init system written from scratch in blazingly fast Rust</li>
-    <li>A ports system</li>
-</ul>
-
-        </p>
+        <p>Static Linux is an extremely simple distro designed for little-to-no abstraction, works without GNU, and emphasizes extreme minimality.</p>
+        <p> </p>
+        <strong>Functionality</strong>
+        <ul>
+            <li>Fast and minimal</li>
+            <li>No GNU dependencies</li>
+            <li>Extreme simplicity</li>
+            <li>An init system written from scratch in blazingly fast Rust</li>
+            <li>A ports system</li>
+        </ul>
     </div>
 </body>
 </html>
