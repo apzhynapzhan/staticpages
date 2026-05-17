@@ -14,11 +14,11 @@
             display: flex;
             flex-direction: column;
         }
-
         .layout {
             display: flex;
             flex: 1;
             overflow: hidden;
+            padding-top: 70px;
         }
         .sidebar {
             width: 180px;
@@ -67,83 +67,82 @@
     </style>
 </head>
 <body>
-
 <div id="header"></div>
 <script>
     fetch('header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
 </script>
-	<div class="layout">
-        <div class="sidebar">
-            <span class="section">getting started</span>
-            <a href="#" class="active" onclick="show('building', this)">building</a>
-            <a href="#" onclick="show('booting', this)">booting</a>
-            <span class="section">packages</span>
-            <a href="#" onclick="show('installing', this)">installing</a>
-            <a href="#" onclick="show('porting', this)">porting</a>
-            <span class="section">ecosystem</span>
-            <a href="#" onclick="show('prometheus', this)">prometheus</a>
-            <a href="#" onclick="show('atlas', this)">atlas</a>
-            <a href="#" onclick="show('hephaestus', this)">hephaestus</a>
-        </div>
-        <div class="content">
-            <div id="building" class="page active">
-                <h2>building from source</h2>
-                <p>clone the main repo and run the build script:</p>
-                <pre>git clone https://codeberg.org/StaticLinux/ashigaru
+<div class="layout">
+    <div class="sidebar">
+        <span class="section">getting started</span>
+        <a href="#" class="active" onclick="show('building', this)">building</a>
+        <a href="#" onclick="show('booting', this)">booting</a>
+        <span class="section">packages</span>
+        <a href="#" onclick="show('installing', this)">installing</a>
+        <a href="#" onclick="show('porting', this)">porting</a>
+        <span class="section">ecosystem</span>
+        <a href="#" onclick="show('prometheus', this)">prometheus</a>
+        <a href="#" onclick="show('atlas', this)">atlas</a>
+        <a href="#" onclick="show('hephaestus', this)">hephaestus</a>
+    </div>
+    <div class="content">
+        <div id="building" class="page active">
+            <h2>building from source</h2>
+            <p>clone the main repo and run the build script:</p>
+            <pre>git clone https://codeberg.org/StaticLinux/ashigaru
 cd ashigaru
 sh build.sh</pre>
-                <p>the build script will download sources, compile the kernel and busybox, and produce a bootable rootfs.</p>
-            </div>
-            <div id="booting" class="page">
-                <h2>booting in qemu</h2>
-                <pre>qemu-system-x86_64 \
+            <p>the build script will download sources, compile the kernel and busybox, and produce a bootable rootfs.</p>
+        </div>
+        <div id="booting" class="page">
+            <h2>booting in qemu</h2>
+            <pre>qemu-system-x86_64 \
   -kernel linux-7.0.8/arch/x86/boot/bzImage \
   -initrd rootfs.cpio.gz \
   -append "console=ttyS0 init=/init" \
   -nographic</pre>
-                <p>exit qemu with <code>Ctrl+A</code> then <code>X</code>.</p>
-            </div>
-            <div id="installing" class="page">
-                <h2>installing packages</h2>
-                <p>use atlas to install packages:</p>
-                <pre>atlas dash
+            <p>exit qemu with <code>Ctrl+A</code> then <code>X</code>.</p>
+        </div>
+        <div id="installing" class="page">
+            <h2>installing packages</h2>
+            <p>use atlas to install packages:</p>
+            <pre>atlas dash
 atlas git</pre>
-            </div>
-            <div id="porting" class="page">
-                <h2>building a port</h2>
-                <p>each port needs a <code>build.sh</code> and <code>pkg.toml</code>:</p>
-                <pre>static-ports/
+        </div>
+        <div id="porting" class="page">
+            <h2>building a port</h2>
+            <p>each port needs a <code>build.sh</code> and <code>pkg.toml</code>:</p>
+            <pre>static-ports/
   shells/
     dash/
       build.sh
       pkg.toml</pre>
-                <p>build it with hephaestus:</p>
-                <pre>python3 hephaestus.py static-ports/shells/dash</pre>
-            </div>
-            <div id="prometheus" class="page">
-                <h2>prometheus</h2>
-                <p>init system written in Rust. mounts filesystems, sets hostname, seeds rng, brings up loopback, spawns getty.</p>
-                <p>hostname is read from <code>/etc/hostname</code>.</p>
-            </div>
-            <div id="atlas" class="page">
-                <h2>atlas</h2>
-                <p>package manager written in Rust. verifies sha256, extracts tarballs to <code>/</code>.</p>
-                <pre>atlas dash-0.5.12</pre>
-            </div>
-            <div id="hephaestus" class="page">
-                <h2>hephaestus</h2>
-                <p>package build system written in Python. reads <code>pkg.toml</code>, runs <code>build.sh</code>, strips and tarballs the output.</p>
-                <pre>python3 hephaestus.py static-ports/shells/dash</pre>
-            </div>
+            <p>build it with hephaestus:</p>
+            <pre>python3 hephaestus.py static-ports/shells/dash</pre>
+        </div>
+        <div id="prometheus" class="page">
+            <h2>prometheus</h2>
+            <p>init system written in Rust. mounts filesystems, sets hostname, seeds rng, brings up loopback, spawns getty.</p>
+            <p>hostname is read from <code>/etc/hostname</code>.</p>
+        </div>
+        <div id="atlas" class="page">
+            <h2>atlas</h2>
+            <p>package manager written in Rust. verifies sha256, extracts tarballs to <code>/</code>.</p>
+            <pre>atlas dash</pre>
+        </div>
+        <div id="hephaestus" class="page">
+            <h2>hephaestus</h2>
+            <p>package build system written in Python. reads <code>pkg.toml</code>, runs <code>build.sh</code>, strips and tarballs the output.</p>
+            <pre>python3 hephaestus.py static-ports/shells/dash</pre>
         </div>
     </div>
-    <script>
-        function show(id, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
-        }
-    </script>
+</div>
+<script>
+    function show(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+    }
+</script>
 </body>
 </html>
