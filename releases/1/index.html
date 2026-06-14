@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Linux/1: GNU's Gambit</title>
+    <style>
+        body {
+            background-color: #001f3f;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+        }
+        .main-content {
+            max-width: 600px;
+            padding-left: 20px;
+            padding-right: 20px;
+            line-height: 1.6;
+            font-size: 1.2em;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+        a {
+            color: #7fbbff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .release-tag {
+            font-size: 0.75em;
+            background-color: #ffffff18;
+            border: 1px solid #ffffff33;
+            border-radius: 4px;
+            padding: 2px 8px;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ffffff22;
+            margin: 24px 0;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+<script>
+    fetch('../../header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+</script>
+    <div class="main-content">
+        <h2>Static Linux/1: GNU's Gambit <span class="release-tag">v0.1.0</span></h2>
+        <p>The first release of Static Linux. Boots to a login prompt, mounts the essential filesystems, and brings up a working BusyBox environment with a custom Rust init.</p>
+        <hr>
+        <strong>What's included</strong>
+        <ul>
+            <li>Prometheus - a Rust init system with filesystem mounting, hostname, loopback, and getty</li>
+            <li>BusyBox 1.38.0 userland</li>
+            <li>Linux 7.0.12 kernel</li>
+            <li>Limine bootloader</li>
+            <li>curl and ace</li>
+        </ul>
+        <hr>
+        <strong>Known limitations</strong>
+        <ul>
+            <li>No persistent storage</li>
+            <li>No package manager in this release</li>
+            <li>Serial and virtual console only</li>
+        </ul>
+        <hr>
+        <strong>Download</strong>
+        <ul>
+            <li><a href="https://codeberg.org/StaticLinux/StaticLinux/releases/tag/1">StaticLinux-1-gnusgambit.iso</a></li>
+        </ul>
+    </div>
+</body>
+</html>
