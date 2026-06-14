@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Linux - Releases</title>
+    <style>
+        body {
+            background-color: #001f3f;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+        }
+        .main-content {
+            max-width: 600px;
+            padding-left: 20px;
+            padding-right: 20px;
+            line-height: 1.6;
+            font-size: 1.2em;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+        a {
+            color: #7fbbff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+<script>
+    fetch('header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+</script>
+    <div class="main-content">
+        <h2>Releases</h2>
+        <ul>
+            <li><a href="/releases/1/">Static Linux/1: GNU's Gambit</a></li>
+        </ul>
+    </div>
+</body>
+</html>
