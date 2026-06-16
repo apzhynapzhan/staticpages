@@ -82,6 +82,7 @@
         <span class="section">ecosystem</span>
         <a href="#" onclick="show('prometheus', this)">prometheus</a>
         <a href="#" onclick="show('ace', this)">ace</a>
+        <a href="#" onclick="show('recount', this)">recount</a>
     </div>
     <div class="content">
         <div id="building" class="page active">
@@ -90,16 +91,19 @@
             <pre>git clone https://codeberg.org/StaticLinux/rootfs
 cd rootfs
 sh build.sh</pre>
-            <p>the build script downloads sources, compiles the kernel and busybox, and produces a bootable rootfs.</p>
+            <p>the build script downloads sources, compiles the kernel and busybox, and produces a bootable squashfs image.</p>
         </div>
         <div id="booting" class="page">
             <h2>booting in qemu</h2>
             <pre>qemu-system-x86_64 \
-  -kernel linux-7.0.8/arch/x86/boot/bzImage \
-  -initrd rootfs.cpio.gz \
-  -append "console=ttyS0 init=/init" \
-  -nographic</pre>
+  -kernel vmlinuz \
+  -initrd initramfs.img \
+  -drive file=staticlinux.squashfs,format=raw \
+  -m 512M \
+  -nographic \
+  -append "console=ttyS0"</pre>
             <p>exit qemu with <code>Ctrl+A</code> then <code>X</code>.</p>
+            <p>the initramfs (initpromefs) extracts the squashfs rootfs into memory and hands off to prometheus.</p>
         </div>
         <div id="installing" class="page">
             <h2>installing packages</h2>
@@ -112,32 +116,42 @@ ace install vcs/git</pre>
             <pre>ace remove shells/dash</pre>
             <p>list installed packages:</p>
             <pre>ace query</pre>
+            <p>inspect a specific package:</p>
+            <pre>ace query dash</pre>
         </div>
         <div id="porting" class="page">
             <h2>writing a port</h2>
-            <p>each port lives under its category in static-ports:</p>
+            <p>each port is a single .scheme file under its category in static-ports:</p>
             <pre>static-ports/
   shells/
     dash/
-      build.sh
-      pkg.toml</pre>
-            <p>pkg.toml format:</p>
-            <pre>name = "dash"
-version = "0.5.12"
-description = "minimal POSIX shell"
-category = "shells"
-source = "http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.12.tar.gz"
-sha256 = "..."
-binary = "dash-0.5.12/src/dash"
-install = "/usr/bin/dash"</pre>
-            <p>build.sh handles configure and make. ace downloads the source, verifies the hash, runs build.sh, strips the binary, and installs it.</p>
+      dash.scheme
+  vcs/
+    git/
+      git.scheme</pre>
+            <p>port format:</p>
+            <pre>(package
+  (name "dash")
+  (version "0.5.12")
+  (category "shells")
+  (description "minimal POSIX shell")
+  (source "http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.12.tar.gz")
+  (sha256 "...")
+  (binary "dash-0.5.12/src/dash")
+  (install "/usr/bin/dash")
+  (build
+    (env "CC" "x86_64-linux-musl-gcc")
+    (run "./configure" "--host=x86_64-linux-musl" "--enable-static")
+    (make)))</pre>
+            <p>ace downloads the source, verifies the sha256, extracts it, runs the build instructions, strips the binary, and installs it.</p>
             <p>to test a port locally:</p>
             <pre>ace install shells/dash</pre>
         </div>
         <div id="prometheus" class="page">
             <h2>prometheus</h2>
-            <p>init system written in Rust. mounts filesystems, sets hostname, seeds rng, brings up loopback, spawns getty.</p>
+            <p>init system written in Rust. mounts filesystems, sets hostname, seeds rng, brings up loopback, spawns getty on tty1, tty2, and ttyS0.</p>
             <p>hostname is read from <code>/etc/hostname</code>.</p>
+            <p>on boot, prometheus runs <code>/var/lib/prometheus/autoexec.sh</code> if it exists.</p>
         </div>
         <div id="ace" class="page">
             <h2>ace</h2>
@@ -146,7 +160,19 @@ install = "/usr/bin/dash"</pre>
 ace install &lt;pkg&gt;   # build and install
 ace remove &lt;pkg&gt;    # uninstall
 ace query [pkg]     # list or inspect</pre>
+            <p>ports use a simple scheme-based DSL. the build system supports env, run, and make instructions.</p>
             <p>ports are fetched from <code>ports.staticlinux.org</code>. the ports tree mirrors the <a href="https://codeberg.org/StaticLinux/static-ports" style="color:#aac8e8">static-ports</a> repo on every push.</p>
+        </div>
+        <div id="recount" class="page">
+            <h2>recount</h2>
+            <p>optional package updater written in C. compares installed versions against the ports tree and rebuilds outdated packages via ace.</p>
+            <pre>recount &lt;pkg&gt;    # upgrade a single package
+recount @matters # upgrade all packages</pre>
+            <p>to ignore a package from upgrades, add it to <code>/var/lib/recount/ignore.scheme</code>:</p>
+            <pre>(ignore
+  "zig-bin"
+  "kernel")</pre>
+            <p>run <code>ace fetch</code> before recount to sync the latest port definitions.</p>
         </div>
     </div>
 </div>
