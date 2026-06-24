@@ -2,47 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- <p>hi</p> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Static Linux</title>
+    <title>static linux</title>
     <style>
         body {
-            background-color: #001f3f;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: left;
+            margin: 0 auto;
+            max-width: 700px;
+            padding: 24px;
+            background: #111;
+            color: #ddd;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
         }
-        .main-content {
-            max-width: 600px;
-            padding-left: 20px;
-            padding-right: 20px;
-            line-height: 1.6;
-            font-size: 1.2em;
-            margin-top: 60px;
-        }
+        a { color: #9b8fd9; }
+        a:hover { color: #ddd; }
+        hr { border: none; border-top: 1px solid #333; margin: 16px 0; }
+        h1, h2 { font-size: 14px; font-weight: bold; margin: 0; }
+        h2 { margin: 24px 0 8px; }
+        ul { margin: 8px 0; padding-left: 20px; }
+        li { margin-bottom: 4px; }
+        .tag { color: #777; }
+        footer { color: #555; margin-top: 32px; }
     </style>
 </head>
 <body>
-<div id="header"></div>
-<script>
-    fetch('header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
-</script>
-    <div class="main-content">
-        <p>Static Linux is an extremely simple distro designed for little-to-no abstraction, works without GNU, and emphasizes extreme minimality.</p>
-        <p> </p>
-        <strong>Functionality</strong>
-        <ul>
-            <li>Fast and minimal</li>
-            <li>No GNU dependencies</li>
-            <li>Extreme simplicity</li>
-            <li>An init system written from scratch in blazingly fast Rust</li>
-            <li>A ports system</li>
-        </ul>
-    </div>
+    <h1>static linux</h1>
+    <span class="tag">an extremely minimal linux distribution</span>
+    <div id="header"></div>
+    <script>
+        fetch('header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+    </script>
+    <hr>
+ 
+    <p>static linux is an extremely simple distro designed for little-to-no abstraction. it works without GNU and emphasizes extreme minimality.</p>
+ 
+    <h2>functionality</h2>
+    <ul>
+        <li>fast and minimal</li>
+        <li>no GNU dependencies</li>
+        <li>extreme simplicity</li>
+        <li>an init system written from scratch in rust</li>
+        <li>a ports system</li>
+    </ul>
+ 
+    <footer>last updated 2026 &mdash; <a href="https://codeberg.org/staticlinux">source</a></footer>
 </body>
 </html>
