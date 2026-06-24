@@ -5,18 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>static linux</title>
     <style>
+        * { box-sizing: border-box; }
         body {
-            margin: 0 auto;
-            max-width: 700px;
-            padding: 24px;
+            margin: 0;
             background: #111;
             color: #ddd;
             font-family: monospace;
             font-size: 14px;
             line-height: 1.5;
+            display: flex;
+            justify-content: center;
         }
-        a { color: #9b8fd9; }
-        a:hover { color: #ddd; }
+        .page {
+            display: flex;
+            max-width: 800px;
+            width: 100%;
+        }
+        nav {
+            flex: 0 0 130px;
+            padding: 24px 16px 24px 24px;
+            border-right: 1px solid #333;
+        }
+        nav a {
+            display: block;
+            margin-bottom: 6px;
+        }
+        nav a.current {
+            color: #ddd;
+            text-decoration: underline;
+        }
+        main {
+            flex: 1;
+            padding: 24px 24px 24px 20px;
+            min-width: 0;
+        }
+        a { color: #9b8fd9; text-decoration: none; }
+        a:hover { color: #ddd; text-decoration: underline; }
         hr { border: none; border-top: 1px solid #333; margin: 16px 0; }
         h1, h2 { font-size: 14px; font-weight: bold; margin: 0; }
         h2 { margin: 24px 0 8px; }
@@ -24,28 +48,48 @@
         li { margin-bottom: 4px; }
         .tag { color: #777; }
         footer { color: #555; margin-top: 32px; }
+
+        @media (max-width: 560px) {
+            .page { flex-direction: column; }
+            nav {
+                flex: none;
+                border-right: none;
+                border-bottom: 1px solid #333;
+                padding: 16px 24px;
+            }
+            main { padding: 16px 24px; }
+        }
     </style>
 </head>
 <body>
-    <h1>static linux</h1>
-    <span class="tag">an extremely minimal linux distribution</span>
-    <div id="header"></div>
-    <script>
-        fetch('header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
-    </script>
-    <hr>
- 
-    <p>static linux is an extremely simple distro designed for little-to-no abstraction. it works without GNU and emphasizes extreme minimality.</p>
- 
-    <h2>functionality</h2>
-    <ul>
-        <li>fast and minimal</li>
-        <li>no GNU dependencies</li>
-        <li>extreme simplicity</li>
-        <li>an init system written from scratch in rust</li>
-        <li>a ports system</li>
-    </ul>
- 
-    <footer>last updated 2026 &mdash; <a href="https://codeberg.org/staticlinux">source</a></footer>
+    <div class="page">
+        <nav id="nav"></nav>
+        <script>
+            fetch('header.html').then(r => r.text()).then(h => {
+                document.getElementById('nav').innerHTML = h;
+                document.querySelectorAll('#nav a').forEach(a => {
+                    if (a.href === location.href.split('#')[0]) a.classList.add('current');
+                });
+            });
+        </script>
+        <main>
+            <h1>static linux</h1>
+            <span class="tag">an extremely minimal linux distribution</span>
+            <hr>
+
+            <p>static linux is an extremely simple distro designed for little-to-no abstraction. it works without GNU and emphasizes extreme minimality.</p>
+
+            <h2>functionality</h2>
+            <ul>
+                <li>fast and minimal</li>
+                <li>no GNU dependencies</li>
+                <li>extreme simplicity</li>
+                <li>an init system written from scratch in rust</li>
+                <li>a ports system</li>
+            </ul>
+
+            <footer>last updated 2026 ; <a href="https://codeberg.org/StaticLinux">source</a></footer>
+        </main>
+    </div>
 </body>
 </html>
