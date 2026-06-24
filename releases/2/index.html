@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Linux/2: Verdict=Guilty</title>
+    <style>
+        body {
+            background-color: #001f3f;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+        }
+        .main-content {
+            max-width: 600px;
+            padding-left: 20px;
+            padding-right: 20px;
+            line-height: 1.6;
+            font-size: 1.2em;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+        a {
+            color: #7fbbff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .release-tag {
+            font-size: 0.75em;
+            background-color: #ffffff18;
+            border: 1px solid #ffffff33;
+            border-radius: 4px;
+            padding: 2px 8px;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ffffff22;
+            margin: 24px 0;
+        }
+        .propaganda {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+<script>
+    fetch('../../header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+</script>
+    <div class="main-content">
+        <h2>Static Linux/2: Verdict=Guilty <span class="release-tag">v0.2.0</span></h2>
+        <p>The second release of Static Linux. Introduces Ace, a working package manager, compiler bootstrapping, and a growing port tree.</p>
+        <hr>
+        <img class="propaganda" src="https://codeberg.org/StaticLinux/pages/raw/branch/pages/assets/propaganda/verdictguilty.png" alt="Verdict=Guilty">
+        <hr>
+        <strong>What's new</strong>
+        <ul>
+            <li>Ace package manager with dependency resolution</li>
+            <li>Compiler bootstrapping pipeline</li>
+            <li>VGA output</li>
+            <li>Expanded kernel support</li>
+        </ul>
+        <hr>
+        <strong>New ports</strong>
+        <ul>
+            <li>Clang/LLD toolchain</li>
+            <li>Zig</li>
+            <li>Git</li>
+            <li>OpenSSL</li>
+            <li>And much more</li>
+        </ul>
+        <hr>
+        <strong>Known limitations</strong>
+        <ul>
+            <li>No persistent storage</li>
+            <li>Serial and virtual console only</li>
+        </ul>
+        <hr>
+        <strong>Download</strong>
+        <ul>
+            <li><a href="https://codeberg.org/StaticLinux/StaticLinux/releases/tag/2">StaticLinux-2-verdictguilty.iso</a></li>
+        </ul>
+    </div>
+</body>
+</html>
