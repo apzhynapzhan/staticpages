@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Linux/2.5: Delinquence</title>
+    <style>
+        body {
+            background-color: #001f3f;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+        }
+        .main-content {
+            max-width: 600px;
+            padding-left: 20px;
+            padding-right: 20px;
+            line-height: 1.6;
+            font-size: 1.2em;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+        a {
+            color: #7fbbff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .release-tag {
+            font-size: 0.75em;
+            background-color: #ffffff18;
+            border: 1px solid #ffffff33;
+            border-radius: 4px;
+            padding: 2px 8px;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ffffff22;
+            margin: 24px 0;
+        }
+        .propaganda {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+<script>
+    fetch('../../header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+</script>
+    <div class="main-content">
+        <h2>Static Linux/2.5: Delinquence <span class="release-tag">v0.2.0</span></h2>
+        <p>Major milestone, includes bare-metal-[ish?] booting, a separated rootfs and initramfs stuff, and fixes a lot of packaging issues.</p>
+        <hr>
+        <img class="propaganda" src="https://raw.githubusercontent.com/apzhynapzhan/staticpages/refs/heads/main/img/static2.5.png" alt="Delinquence">
+        <hr>
+        <strong>What's new</strong>
+        <ul>
+            <li>HDMI outputting</li>
+            <li>Fixed compiler edge cases</li>
+            <li>Expanded kernel support</li>
+        </ul>
+        <hr>
+        <strong>New ports</strong>
+        <ul>
+            <li>NASM</li>
+            <li>ell</li>
+            <li>make</li>
+            <li>ninja</li>
+        </ul>
+        <hr>
+        <strong>Known limitations</strong>
+        <ul>
+            <li>No persistent storage</li>
+        </ul>
+        <hr>
+        <strong>Download</strong>
+        <ul>
+            <li><a href="https://archive.staticlinux.org/v2.5/">StaticLinux-2.5-deliquence.iso</a></li>
+        </ul>
+    </div>
+</body>
+</html>
