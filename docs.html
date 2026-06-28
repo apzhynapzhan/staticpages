@@ -84,6 +84,7 @@
         <a href="#" onclick="show('prometheus', this)">prometheus</a>
         <a href="#" onclick="show('promectl', this)">promectl</a>
         <a href="#" onclick="show('superpose', this)">superpose</a>
+        <a href="#" onclick="show('neostrap', this)">neostrap</a>
         <a href="#" onclick="show('ace', this)">ace</a>
         <a href="#" onclick="show('recount', this)">recount</a>
     </div>
@@ -171,6 +172,47 @@ promectl halt</pre>
             <p>planned layout, one file per service:</p>
             <pre>/etc/superpose/services/&lt;svc&gt;.scheme</pre>
             <p>check back once there's actually something to document.</p>
+        </div>
+        <div id="neostrap" class="page">
+            <h2>neostrap</h2>
+            <p>bootstraps a fully self-hosted clang+musl toolchain from a 400KB statically linked tcc binary. fork of <a href="https://github.com/ZilchOS/bootstrap-from-tcc" style="color:#aac8e8">bootstrap-from-tcc</a> with nix ripped out - pure sh/make, no nix anywhere in the chain.</p>
+            <p>used as the reference bootstrap for Static Linux's musl/clang toolchain.</p>
+            <h2>stage graph</h2>
+            <p>stage1 is hand-written C run directly against the tcc seed (no libc, no stdlib) inside an unshare+chroot sandbox. it builds enough of musl and busybox from scratch to get a working shell, then rebuilds tcc itself three times against its own output.</p>
+            <pre>0-tcc-seed        pack the supplied tcc-seed binary
+1-stage1          protomusl + protobusybox + self-hosted tcc</pre>
+            <p>everything past stage1 is plain recipe scripts (<code>recipes/*.sh</code>), each one a chroot'd shell script with declared package deps. stage 2a climbs from tcc up to an intermediate clang using GNU toolchains as scaffolding:</p>
+            <pre>2a0  static gnumake        2a5  gcc10 (musl-targeting)
+2a1  static binutils       2a6  linux headers
+2a2  gcc4 (C only)          2a7  cmake
+2a3  intermediate musl      2a8  python
+2a4  gcc4 (C++)             2a9  intermediate clang (LLVM 17, 2-stage)</pre>
+            <p>stage 2b rebuilds the final, self-hosted set using only the intermediate clang from 2a9 - no GNU toolchain left in the output:</p>
+            <pre>2b0  musl (final)
+2b1  clang (final, self-hosted, linked against 2b0)
+2b2  busybox (built with 2b1)
+2b3  gnumake (built with 2b1)</pre>
+            <p>everything is content-addressed: each <code>pkgs/&lt;stage&gt;.pkg</code> is a deterministic tar+zstd of <code>store/&lt;stage&gt;</code>, with <code>SOURCE_DATE_EPOCH</code> pinned and build paths scrubbed.</p>
+            <h2>usage</h2>
+            <p>simple, non-incremental path - supply <code>tcc-seed</code>, then exec straight through everything:</p>
+            <pre>./build.sh</pre>
+            <p>incremental, for debugging a specific stage:</p>
+            <pre>make all-pkgs       # build every stage
+make pkgs/2b1-clang.pkg   # build up to a specific stage
+make all-tests      # run the _N.test.pkg sanity checks</pre>
+            <p>reproducibility checks against a committed checksum manifest:</p>
+            <pre>make verify-pkgs-checksums       # check existing pkgs/ against verify.pkgs.sha256
+make verify-all-pkgs-checksums   # build everything, then check
+make update-pkgs-checksums       # regenerate the manifest</pre>
+            <p>build isolation knobs, set as env vars or make args: <code>USE_CCACHE=1</code> caches compiler output per-stage, <code>USE_DISORDERFS=1</code> shuffles directory entry order during builds to catch order-dependence bugs, <code>SAVE_MISMATCHING_BUILD_TREES=1</code> stashes a full build tree to <code>trees/</code> whenever a checksum doesn't match.</p>
+            <h2>requirements</h2>
+            <p>a statically linked tcc binary at <code>./tcc-seed</code>, linux x86_64, ~8GB free for the build tmpfs, and several hours - the full chain takes 4-8 hours depending on hardware.</p>
+            <h2>fetching sources</h2>
+            <p>recipe scripts declare their downloads inline with magic comments:</p>
+            <pre>#&gt; FETCH &lt;sha256&gt;
+#&gt;  FROM &lt;url&gt;
+#&gt;    AS &lt;local filename&gt;</pre>
+            <p><code>download.sh</code> scans for these (plus the old nix-derivation form, for upstream compat), fetches into <code>downloads/</code>, and verifies the hash before copying into the build's <code>DESTDIR</code>.</p>
         </div>
         <div id="ace" class="page">
             <h2>ace</h2>
