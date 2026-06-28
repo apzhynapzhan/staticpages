@@ -64,6 +64,7 @@
         p { margin: 0.5em 0; }
         .page { display: none; }
         .page.active { display: block; }
+        .wip { color: #ffaa55; font-size: 0.8em; }
     </style>
 </head>
 <body>
@@ -81,6 +82,8 @@
         <a href="#" onclick="show('porting', this)">porting</a>
         <span class="section">ecosystem</span>
         <a href="#" onclick="show('prometheus', this)">prometheus</a>
+        <a href="#" onclick="show('promectl', this)">promectl</a>
+        <a href="#" onclick="show('superpose', this)">superpose</a>
         <a href="#" onclick="show('ace', this)">ace</a>
         <a href="#" onclick="show('recount', this)">recount</a>
     </div>
@@ -149,9 +152,25 @@ ace install vcs/git</pre>
         </div>
         <div id="prometheus" class="page">
             <h2>prometheus</h2>
-            <p>init system written in Rust. mounts filesystems, sets hostname, seeds rng, brings up loopback, spawns getty on tty1, tty2, and ttyS0.</p>
-            <p>hostname is read from <code>/etc/hostname</code>.</p>
-            <p>on boot, prometheus runs <code>/var/lib/prometheus/autoexec.sh</code> if it exists.</p>
+            <p>PID1, written in Rust. boots in two stages.</p>
+            <p>stage0: mounts filesystems, sets hostname from <code>/etc/hostname</code>, seeds rng, brings up loopback.</p>
+            <p>stage1: spawns getty on tty1, tty2, and ttyS0, then opens a unix socket listener at <code>/run/prometheus.sock</code> for <a href="#" onclick="show('promectl', this)" style="color:#aac8e8">promectl</a>.</p>
+            <p>after stage1, runs <code>/var/lib/prometheus/autoexec.sh</code> if it exists.</p>
+        </div>
+        <div id="promectl" class="page">
+            <h2>promectl</h2>
+            <p>control CLI for prometheus. talks to <code>/run/prometheus.sock</code> over a line-based text protocol.</p>
+            <pre>promectl reboot
+promectl poweroff
+promectl halt</pre>
+            <p>client writes the command, shuts down the write half of the socket, then reads the response. skip the shutdown and you'll deadlock waiting on each other.</p>
+        </div>
+        <div id="superpose" class="page">
+            <h2>superpose <span class="wip">(in progress, not shipped)</span></h2>
+            <p>service supervisor for prometheus. not implemented yet - this page exists so the sidebar link isn't dead.</p>
+            <p>planned layout, one file per service:</p>
+            <pre>/etc/superpose/services/&lt;svc&gt;.scheme</pre>
+            <p>check back once there's actually something to document.</p>
         </div>
         <div id="ace" class="page">
             <h2>ace</h2>
